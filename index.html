@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #titulo {
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.2;
+      padding: 0;
+      margin: 0;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div id="titulo"></div>
+
+  <script>
+    const hoy = new Date().toLocaleDateString('es-CO', {
+      timeZone: 'America/Bogota',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+
+    document.getElementById('titulo').textContent =
+      `Estado de la flota — ${hoy}`;
+  </script>
+</body>
+</html>
