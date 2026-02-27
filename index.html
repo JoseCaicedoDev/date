@@ -23,45 +23,18 @@
     }
 
     #titulo {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       letter-spacing: 2px;
       line-height: 1.5;
       white-space: nowrap;
     }
-
-    #detalle {
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      line-height: 1.5;
-      margin-top: 12px;
-      white-space: normal;
-    }
   </style>
 </head>
 <body>
   <div id="titulo" class="texto">Estado de la flota — Cargando...</div>
-  <div id="detalle" class="texto">Cargando última inspección...</div>
 
   <script>
-    const QUERY_URL =
-      "https://tecgisdev.tecna-ice.com/server/rest/services/HSE/FL_INSPECCION_VEHICULO_LAST_VIEW/MapServer/8/query?where=1%3D1&outFields=fecha_insp%2Cplaca%2Cproyecto&returnGeometry=false&f=json";
-
-    function formatearFecha(valor) {
-      if (!valor) return "N/D";
-
-      const fecha = new Date(valor);
-      if (isNaN(fecha.getTime())) return "N/D";
-
-      return new Intl.DateTimeFormat("es-CO", {
-        timeZone: "America/Bogota",
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric"
-      }).format(fecha);
-    }
-
     function fechaHoy() {
       return new Intl.DateTimeFormat("es-CO", {
         timeZone: "America/Bogota",
@@ -71,45 +44,8 @@
       }).format(new Date());
     }
 
-    async function cargarDatos() {
-      document.getElementById("titulo").textContent =
-        `Estado de la flota — ${fechaHoy()}`;
-
-      try {
-        const resp = await fetch(QUERY_URL, {
-          method: "GET",
-          cache: "no-store"
-        });
-
-        if (!resp.ok) {
-          throw new Error("No fue posible consultar el servicio.");
-        }
-
-        const data = await resp.json();
-
-        if (!data.features || data.features.length === 0) {
-          document.getElementById("detalle").textContent =
-            "No hay inspección disponible.";
-          return;
-        }
-
-        const atr = data.features[0].attributes;
-
-        const fechaInspeccion = formatearFecha(atr.fecha_insp);
-        const placa = atr.placa || "N/D";
-        const proyecto = atr.proyecto || "N/D";
-
-        document.getElementById("detalle").textContent =
-          `Última inspección registrada: ${fechaInspeccion} - Placa: ${placa} - Proyecto: ${proyecto}.`;
-
-      } catch (error) {
-        document.getElementById("detalle").textContent =
-          "Error consultando la última inspección.";
-        console.error(error);
-      }
-    }
-
-    cargarDatos();
+    document.getElementById("titulo").textContent =
+      `Estado de la flota — ${fechaHoy()}`;
   </script>
 </body>
 </html>
